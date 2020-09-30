@@ -6,7 +6,7 @@
 .RECIPEPREFIX = +
 
 #Definitions.
-CFLAGS = -g -std=c99 -Wall -Werror -I../../drivers/avr
+CFLAGS = -g -std=c99 -Wall -Werror -I../../../drivers/avr
 
 #Main target
 PaperScissorsRock: PaperScissorsRock.o
