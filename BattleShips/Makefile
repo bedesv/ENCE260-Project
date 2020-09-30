@@ -1,7 +1,7 @@
 # File:    Makefile
 # Author:  Bede Skinner-Vennell, Jack Warburton
 # Date:    30 Sep 2020
-# Descr:   Makefile for PaperScissorsRock
+# Descr:   Makefile for Battleships
 
 .RECIPEPREFIX = +
 
@@ -14,10 +14,10 @@ SIZE = avr-size
 
 
 # Default target.
-all: PaperScissorsRock.out
+all: Battleships.out
 
 # Compile: create object files from C files.
-PaperScissorsRock.o: PaperScissorsRock.c ../../../drivers/avr/system.h
+Battleships.o: Battleships.c ../../../drivers/avr/system.h
 +$(CC) -c $(CFLAGS) $< -o $@
 
 system.o: ../../../drivers/avr/system.c ../../../drivers/avr/system.h
@@ -25,7 +25,7 @@ system.o: ../../../drivers/avr/system.c ../../../drivers/avr/system.h
 
 
 # Link
-PaperScissorsRock.out: PaperScissorsRock.o system.o
+Battleships.out: Battleships.o system.o
 +$(CC) $(CFLAGS) $^ -o $@ -lm
 +$(SIZE) $@
 
@@ -35,6 +35,6 @@ clean:
 +rm *.o *.out *.hex
 
 # Target program project.
-program: PaperScissorsRock.out
-+$(OBJCOPY) -O ihex PaperScissorsRock.out PaperScissorsRock.hex
-+dfu-programmer atmega32u2 erase; dfu-programmer atmega32u2 flash PaperScissorsRock.hex; dfu-programmer atmega32u2 start
+program: Battleships.out
++$(OBJCOPY) -O ihex Battleships.out Battleships.hex
++dfu-programmer atmega32u2 erase; dfu-programmer atmega32u2 flash Battleships.hex; dfu-programmer atmega32u2 start
