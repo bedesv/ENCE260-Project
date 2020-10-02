@@ -21,8 +21,7 @@ static const pio_t rows[] =
     LEDMAT_ROW7_PIO
 };
 
-static const pio_t cols[] =
-{
+static const pio_t cols[] = {
     LEDMAT_COL1_PIO, LEDMAT_COL2_PIO, LEDMAT_COL3_PIO,
     LEDMAT_COL4_PIO, LEDMAT_COL5_PIO
 };
@@ -80,17 +79,6 @@ void display_message_until_joystick_moved(char* message)
 
 }
 
-void wait_x_ms(uint16_t ms)
-{
-
-    uint16_t ticks = (ms * (CPU_F / TIMER1_PRESCALE) / 1000);
-    TCNT1 = 0;
-    while (TCNT1 < ticks)
-    {
-        continue;
-    }
-}
-
 void display_character (char character)
 {
     char buffer[2];
@@ -99,7 +87,16 @@ void display_character (char character)
     tinygl_text(buffer);
 }
 
- int main(void)
+void pause(uint16_t time)
+{
+    uint16_t tick = 0;
+    while (tick < time) {
+        tick++;
+        pacer_wait();
+    }
+}
+
+int main(void)
 {
     system_init ();
     navswitch_init();
