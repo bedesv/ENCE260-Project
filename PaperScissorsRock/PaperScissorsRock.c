@@ -137,11 +137,11 @@ int pick_move(void)
     return char_index;
 }
 
-uint8_t char_transmission(uint8_t home_move)
+char char_transmission(int home_move)
 {
-    uint8_t away_move = 3;
+    char away_move = '\0';
 
-    while (away_move == 3)
+    while (away_move == '\0')
     {
         pacer_wait();
         ir_uart_putc(home_move);
@@ -167,6 +167,7 @@ int main(void)
     pacer_wait();
     int home_move;
     int away_move;
+    home_move = pick_move();
 
 
 
@@ -174,7 +175,7 @@ int main(void)
     {
         pacer_wait();
 
-        home_move = pick_move();
+
         away_move = char_transmission(home_move);
         display_character(possible_chars[away_move]);
         tinygl_update();
