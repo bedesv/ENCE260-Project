@@ -6,6 +6,7 @@
 #include "navswitch.h"
 #include "timer.h"
 #include "navswitch.c"
+#include "ir_uart.h"
 #include "../../fonts/font3x5_1.h"
 #include "../../fonts/font5x7_1.h"
 
@@ -28,7 +29,7 @@ static const pio_t cols[] = {
 
 static const char possible_chars[] =
 {
-    'R', 'P', 'S'
+    'P', 'R', 'S'
 };
 
 
@@ -96,22 +97,18 @@ void pause(uint16_t time)
     }
 }
 
-int main(void)
+int pick_move(void)
 {
-    system_init ();
-    navswitch_init();
-    text_init();
-    timer_init();
-
-    pacer_init(PACER_RATE);
-    display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
-    pacer_wait();
+    tinygl_font_set(&font3x5_1);
+    clear_display();
     display_message_until_joystick_moved("PICK MOVE");
+
     int char_index = 0;
+    bool selected = 0;
     tinygl_font_set(&font5x7_1);
 
 
-    while (1)
+    while (selected == 0)
     {
         pacer_wait();
         tinygl_update();
@@ -130,10 +127,58 @@ int main(void)
                 char_index--;
             }
         } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-          break;
+          selected = 1;
         }
 
         display_character(possible_chars[char_index]);
+
+    }
+    clear_display();
+    return char_index;
+}
+
+uint8_t char_transmission(uint8_t home_move)
+{
+    uint8_t away_move = 3;
+
+    while (away_move == 3)
+    {
+        pacer_wait();
+        ir_uart_putc(home_move);
+        if (ir_uart_read_ready_p())
+        {
+            away_move = ir_uart_getc();
+        }
+    }
+    return away_move;
+
+}
+
+int main(void)
+{
+    system_init ();
+    navswitch_init();
+    text_init();
+    timer_init();
+    ir_uart_init();
+
+    pacer_init(PACER_RATE);
+    display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
+    pacer_wait();
+    int home_move;
+    int away_move;
+
+
+
+    while (1)
+    {
+        pacer_wait();
+
+        home_move = pick_move();
+        away_move = char_transmission(home_move);
+        display_character(possible_chars[away_move]);
+        tinygl_update();
+
 
     }
 }
