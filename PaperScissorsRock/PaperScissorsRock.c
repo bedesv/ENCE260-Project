@@ -154,8 +154,8 @@ char char_transmission(int home_move)
             ready = ir_uart_getc();
         }
     }
-
-    while (away_move != possible_chars[0] && away_move != possible_chars[1] && away_move != possible_chars[2])
+    TCNT1 = 0;
+    while (TCNT1 < 39060)//away_move != possible_chars[0] && away_move != possible_chars[1] && away_move != possible_chars[2])
     {
         pacer_wait();
         ir_uart_putc(possible_chars[home_move]);
