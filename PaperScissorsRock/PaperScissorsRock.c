@@ -144,6 +144,17 @@ char char_transmission(int home_move)
 {
     char away_move;
 
+    char ready = 0;
+    while (ready == 0)
+    {
+        pacer_wait
+        ir_uart_putc(1)
+        if (ir_uart_read_ready_p())
+        {
+            ready = ir_uart_getc();
+        }
+    }
+
     while (away_move != possible_chars[0] && away_move != possible_chars[1] && away_move != possible_chars[2])
     {
         pacer_wait();
