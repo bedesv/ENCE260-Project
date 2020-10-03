@@ -1,62 +1,85 @@
 #include "system.h"
-#include "PaperScissorsRock.h"
+#include <stdlib.h>
 
-#define WINS = 0
-#define LOST = 0
-#define DRAWS = 0
-#definr PLAYED = 0
+typedef struct scoreboard {
+    int wins;
+    int lost;
+    int draw;
+    int played;
+} stats;
 
-/* P R S = 0 1 2
+
+stats* SCORE = NULL;
+
+// Initialise the scoreboard
+void score_init(void)
+{
+    SCORE = malloc(sizeof(stats));
+    SCORE->wins = 0;
+    SCORE->lost = 0;
+    SCORE->draw = 0;
+    SCORE->played = 0;
+}
+
+/*Checks who won the round
+ * Actions:
+ * P R S = 0 1 2
  *
  * Result:
  * 0 = draw
  * 1 = win
  * 2 = loss
  */
-int check_selections(int home int away)
+int check_selections(int home, int away)
 {
-    u_int16_t result;
+    uint16_t result;
     //Tie
     if (home == away) {
         result = 0;
     }
 
     if (home < away) {
-       if ((b-a) = 1) {
-           result = 1;
-       } else {
-           result = 2;
-       }
+        if ((away-home) == 1) {
+            result = 1;
+        } else {
+            result = 2;
+        }
     } else {
-        if ((a-b) = 1) {
-           result = 2;
-       } else {
-           result = 1;
-       }
+        if ((home-away) == 1) {
+            result = 2;
+        } else {
+            result = 1;
+        }
     }
     return result;
 }
 
-void update_score(int home int away)
+//Checks current round and updates scoreboard
+void update_score(int home, int away)
 {
-    int result = check_solutions(int home int away);
-    if (result = 1) {
-        WINS++;
+    int result = 0;
+    result = check_selections(home, away);
+    if (result == 1) {
+        SCORE->wins++;
     }
-    if (result = 2) {
-        LOST++;
+    if (result == 2) {
+        SCORE->lost++;
+    } else {
+        SCORE->draw++;
+        SCORE->played++;
     }
-    PLAYED++;
 }
 
-int* get_score()
+//Returns the address of the scoreboard
+stats* get_score(void)
 {
-    int* stats[] = {WINS, LOST, DRAW, PLAYED}
-    return stats;
+    return SCORE;
 }
 
-
-int main(void)
+//Frees the malloc (deletes scoreboard)
+void free_score(void)
 {
-
+    free(SCORE);
 }
+
+

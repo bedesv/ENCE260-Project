@@ -10,6 +10,8 @@
 #include "../../fonts/font3x5_1.h"
 #include "../../fonts/font5x7_1.h"
 
+#include "ScoreControl.h"
+
 #define PACER_RATE 500
 #define MESSAGE_RATE 15
 #define TIMER1_PRESCALE 1024
@@ -177,6 +179,8 @@ int main(void)
     timer_init();
     ir_uart_init();
 
+    score_init();
+
     pacer_init(PACER_RATE);
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
@@ -196,6 +200,7 @@ int main(void)
 
 
 
+        update_score(home_move, away_move);
 
     }
 }

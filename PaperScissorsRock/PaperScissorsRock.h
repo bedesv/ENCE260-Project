@@ -1,3 +1,6 @@
+#include "system.h"
+#include "ScoreControl.h"
+
 static const pio_t rows[];
 
 static const pio_t cols[];
