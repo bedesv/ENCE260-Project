@@ -131,7 +131,6 @@ int pick_move(void)
                 char_index--;
             }
         } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-          ir_uart_putc(possible_chars[char_index]);
           selected = 1;
         }
 
@@ -144,27 +143,38 @@ int pick_move(void)
 
 char char_transmission(int home_move)
 {
-    char away_move;
+    char away_move = 'G';
+    /*
+    bool opponent_ready = 0;
+    char opponent = 0;
 
-    char ready = 0;
-    while (ready == 0)
+    while (opponent_ready == 0)
     {
         pacer_wait();
         ir_uart_putc(1);
-        if (ir_uart_read_ready_p())
-        {
-            ready = ir_uart_getc();
+        if (ir_uart_read_ready_p()) {
+            char ch;
+            ch = ir_uart_getc();
+            opponent = ch;
         }
+        if (opponent != 0) {
+            opponent_ready = 1;
+        }
+
     }
-    TCNT1 = 0;
-    while (TCNT1 < 39060)//away_move != possible_chars[0] && away_move != possible_chars[1] && away_move != possible_chars[2])
+    */
+    PORTC |= (1<<2);
+    while (away_move == 'G')
     {
+
         pacer_wait();
         ir_uart_putc(possible_chars[home_move]);
-        if (ir_uart_read_ready_p())
-        {
-            away_move = ir_uart_getc();
+        if (ir_uart_read_ready_p()) {
+            char ch;
+            ch = ir_uart_getc();
+            away_move = ch;
         }
+
     }
 
     return away_move;
@@ -180,7 +190,8 @@ int main(void)
     ir_uart_init();
 
     score_init();
-
+    DDRD &= (0<<7);
+    DDRC |= (1<<2);
     pacer_init(PACER_RATE);
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
@@ -188,8 +199,10 @@ int main(void)
     char away_move;
     home_move = pick_move();
     away_move = char_transmission(home_move);
-
+    PORTC &= (0<<2);
     display_character(away_move);
+
+
 
 
 
