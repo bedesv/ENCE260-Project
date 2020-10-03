@@ -67,6 +67,7 @@ void clear_display(void)
 
 void display_message_until_joystick_moved(char* message)
 {
+    tinygl_font_set(&font3x5_1);
     tinygl_text(message);
     int moved = 0;
     while (moved != 1)
@@ -82,6 +83,7 @@ void display_message_until_joystick_moved(char* message)
 
 void display_character (char character)
 {
+    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
     char buffer[2];
     buffer[0] = character;
     buffer[1] = '\0';
@@ -99,7 +101,7 @@ void pause(uint16_t time)
 
 int pick_move(void)
 {
-    tinygl_font_set(&font3x5_1);
+
     clear_display();
     display_message_until_joystick_moved("PICK MOVE");
 
@@ -127,6 +129,7 @@ int pick_move(void)
                 char_index--;
             }
         } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+          ir_uart_putc(possible_chars[char_index]);
           selected = 1;
         }
 
@@ -139,9 +142,9 @@ int pick_move(void)
 
 char char_transmission(int home_move)
 {
-    char away_move = '\0';
+    char away_move;
 
-    while (away_move == '\0')
+    while (away_move != possible_chars[0] && away_move != possible_chars[1] && away_move != possible_chars[2])
     {
         pacer_wait();
         ir_uart_putc(possible_chars[home_move]);
@@ -149,7 +152,10 @@ char char_transmission(int home_move)
         {
             away_move = ir_uart_getc();
         }
+        display_character(away_move);
+        tinygl_update();
     }
+
     return away_move;
 
 }
@@ -166,19 +172,20 @@ int main(void)
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
     int home_move;
-    int away_move;
+    char away_move;
     home_move = pick_move();
+    away_move = char_transmission(home_move);
+
+    display_character(away_move);
 
 
 
     while (1)
     {
         pacer_wait();
-
-
-        away_move = char_transmission(home_move);
-        display_character(away_move);
         tinygl_update();
+
+
 
 
     }
