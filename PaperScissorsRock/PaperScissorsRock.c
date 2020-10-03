@@ -147,8 +147,8 @@ char char_transmission(int home_move)
     char ready = 0;
     while (ready == 0)
     {
-        pacer_wait
-        ir_uart_putc(1)
+        pacer_wait();
+        ir_uart_putc(1);
         if (ir_uart_read_ready_p())
         {
             ready = ir_uart_getc();
@@ -196,8 +196,7 @@ int main(void)
         pacer_wait();
         tinygl_update();
 
-        
-        
+
 
 
     }
