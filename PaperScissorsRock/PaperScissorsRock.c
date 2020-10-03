@@ -17,8 +17,7 @@
 #define TIMER1_PRESCALE 1024
 #define CPU_F 8000000
 
-static const pio_t rows[] =
-{
+static const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
     LEDMAT_ROW4_PIO, LEDMAT_ROW5_PIO, LEDMAT_ROW6_PIO,
     LEDMAT_ROW7_PIO
@@ -29,8 +28,7 @@ static const pio_t cols[] = {
     LEDMAT_COL4_PIO, LEDMAT_COL5_PIO
 };
 
-static const char possible_chars[] =
-{
+static const char possible_chars[] = {
     'P', 'R', 'S'
 };
 
@@ -72,8 +70,7 @@ void display_message_until_joystick_moved(char* message)
     tinygl_font_set(&font3x5_1);
     tinygl_text(message);
     int moved = 0;
-    while (moved != 1)
-    {
+    while (moved != 1) {
         pacer_wait();
         tinygl_update();
         navswitch_update();
@@ -106,17 +103,16 @@ int pick_move(void)
 
     clear_display();
     display_message_until_joystick_moved("PICK MOVE");
-
-    int char_index = 0;
     bool selected = 0;
+    int char_index = 0;
     tinygl_font_set(&font5x7_1);
+    char away_move = 'H';
 
-
-    while (selected == 0)
-    {
+    while (!selected) {
         pacer_wait();
         tinygl_update();
         navswitch_update();
+
 
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             if (char_index == 2) {
@@ -131,44 +127,56 @@ int pick_move(void)
                 char_index--;
             }
         } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-          selected = 1;
+            selected = 1;
+
+            PORTC |= (1<<2);
+
         }
 
         display_character(possible_chars[char_index]);
 
     }
+
+
+    while (1)
+    {
+        pacer_wait();
+        if (PIND & (1<<7))
+        {
+            ir_uart_putc(possible_chars[char_index]);
+            if (away_move != 'H')
+            {
+                display_character(away_move);
+
+                tinygl_update();
+                break;
+            }
+        }
+
+        if (ir_uart_read_ready_p()) {
+
+            char ch;
+            ch = ir_uart_getc();
+            away_move = ch;
+            PORTC &= (0<<2);
+        }
+    }
     clear_display();
+
+    display_character(away_move);
+
+    tinygl_update();
     return char_index;
 }
 
 char char_transmission(int home_move)
 {
     char away_move = 'G';
-    /*
-    bool opponent_ready = 0;
-    char opponent = 0;
 
-    while (opponent_ready == 0)
-    {
-        pacer_wait();
-        ir_uart_putc(1);
-        if (ir_uart_read_ready_p()) {
-            char ch;
-            ch = ir_uart_getc();
-            opponent = ch;
-        }
-        if (opponent != 0) {
-            opponent_ready = 1;
-        }
-
-    }
-    */
     PORTC |= (1<<2);
-    while (away_move == 'G')
-    {
+    while (away_move == 'G') {
 
-        pacer_wait();
-        ir_uart_putc(possible_chars[home_move]);
+
         if (ir_uart_read_ready_p()) {
             char ch;
             ch = ir_uart_getc();
@@ -188,6 +196,7 @@ int main(void)
     text_init();
     timer_init();
     ir_uart_init();
+    DDRD &= (0<<7);
 
     score_init();
     DDRD &= (0<<7);
@@ -198,22 +207,18 @@ int main(void)
     int home_move;
     char away_move;
     home_move = pick_move();
-    away_move = char_transmission(home_move);
-    PORTC &= (0<<2);
-    display_character(away_move);
 
 
 
 
 
-    while (1)
-    {
+    while (1) {
         pacer_wait();
         tinygl_update();
 
 
 
-        update_score(home_move, away_move);
+        //update_score(home_move, away_move);
 
     }
 }
