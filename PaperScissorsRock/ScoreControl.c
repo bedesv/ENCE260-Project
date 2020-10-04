@@ -4,7 +4,7 @@
 typedef struct scoreboard {
     int wins;
     int losses;
-    int draw;
+    int draws;
     int played;
 } stats;
 
@@ -36,9 +36,8 @@ int check_selections(int home, int away)
     //Tie
     if (home == away) {
         result = 0;
-    }
 
-    if (home < away) {
+    } else if (home < away) {
         if ((away-home) == 1) {
             result = 1;
         } else {

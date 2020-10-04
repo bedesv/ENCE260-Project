@@ -218,14 +218,9 @@ int main(void)
     pacer_wait();
     int moves[2];
     stats* current_stats;
-    int wins;
 
-    char stats_array[4];
 
-    pick_move(moves);
-    int home_move = moves[0];
-    int away_move = moves[1];
-    update_score(home_move, away_move);
+
 
     pick_move(moves);
     int home_move = moves[0];
@@ -233,10 +228,8 @@ int main(void)
     update_score(home_move, away_move);
     current_stats = get_score();
 
-    wins = current_stats->wins;
-    char wins_char = wins + 48;
-    stats_array = {current_stats->wins + 48, current_stats->losses + 48,
-        current_stats->draws + 48, current_stats->played + 48}
+    char stats_array[] = {current_stats->wins + 48, current_stats->losses + 48,
+        current_stats->draws + 48, current_stats->played + 48};
 
 
     int stats_index = 0;
@@ -244,11 +237,17 @@ int main(void)
 
     while (1) {
         pacer_wait();
+        navswitch_update();
         if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            if stats_index == 3
+            if (stats_index == 3) {
+                stats_index = 0;
+            } else {
+                stats_index++;
+            }
 
         }
-        display_character(wins_char);
+
+        display_character(stats_array[stats_index]);
         tinygl_update();
 
 
