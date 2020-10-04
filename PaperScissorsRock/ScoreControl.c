@@ -4,7 +4,7 @@
 typedef struct scoreboard {
     int wins;
     int losses;
-    int draw;
+    int draws;
     int played;
 } stats;
 
@@ -36,9 +36,8 @@ int check_selections(int home, int away)
     //Tie
     if (home == away) {
         result = 0;
-    }
 
-    if (home < away) {
+    } else if (home < away) {
         if ((away-home) == 1) {
             result = 1;
         } else {
@@ -61,13 +60,14 @@ void update_score(int home, int away)
     result = check_selections(home, away);
     if (result == 1) {
         SCORE->wins++;
-    }
-    if (result == 2) {
+
+    } else if (result == 2) {
         SCORE->losses++;
     } else {
         SCORE->draws++;
-        SCORE->played++;
+
     }
+    SCORE->played++;
 }
 
 //Returns the address of the scoreboard
