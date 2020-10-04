@@ -16,6 +16,7 @@
 #define MESSAGE_RATE 15
 #define TIMER1_PRESCALE 1024
 #define CPU_F 8000000
+#define LED_PIO PIO_DEFINE(PORT_C, 2)
 
 static const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
@@ -82,6 +83,7 @@ void display_message_until_joystick_moved(char* message)
 
 void display_character (char character)
 {
+	tinygl_font_set(&font5x7_1);
     tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
     char buffer[2];
     buffer[0] = character;
@@ -98,77 +100,91 @@ void pause(uint16_t time)
     }
 }
 
+int index_of_char(char character)
+{
+	int index = 0;
+	if (character == possible_chars[0]) {
+		index = 0;
+	} else if (character == possible_chars[1]) {
+		index = 1;
+	} else if (character == possible_chars[2]) {
+		index = 2;
+	}
+	return index;
+}
+
+void wait(uint16_t count)
+{
+	TCNT1 = 0;
+    while (TCNT1 < count) {
+		continue;
+	}
+}
+
 int pick_move(void)
 {
 
     clear_display();
     display_message_until_joystick_moved("PICK MOVE");
-    bool selected = 0;
-    int char_index = 0;
-    tinygl_font_set(&font5x7_1);
-    char away_move = 'H';
+    
+	
+	int char_index = 0;
+    char character;
 
-    while (!selected) {
-        pacer_wait();
-        tinygl_update();
-        navswitch_update();
-
-
+	while (1)
+    {
+        pacer_wait ();
+        tinygl_update ();
+        navswitch_update ();
+        
+        character = possible_chars[char_index];
+        
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             if (char_index == 2) {
                 char_index = 0;
             } else {
                 char_index ++;
             }
-        } else if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+        }
+        if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
             if (char_index == 0) {
                 char_index = 2;
             } else {
                 char_index--;
             }
-        } else if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            selected = 1;
+		}
 
-            PORTC |= (1<<2);
-
-        }
-
-        display_character(possible_chars[char_index]);
-
+        /* TODO: Transmit the character over IR on a NAVSWITCH_PUSH
+           event.  */
+        if (navswitch_push_event_p (NAVSWITCH_PUSH))
+			ir_uart_putc(character);
+		
+		
+		if (ir_uart_read_ready_p()) {
+			char ch;
+			ch = ir_uart_getc();
+			character = ch; 
+			char_index = index_of_char(character);
+			for (int i = 0; i <= char_index; i++)
+			{
+				pio_output_toggle(LED_PIO);
+				wait(500);
+			}
+        
+       }
+        display_character (character);
+        
     }
-
-
-    while (1)
-    {
-        pacer_wait();
-        if (PIND & (1<<7))
-        {
-            ir_uart_putc(possible_chars[char_index]);
-            if (away_move != 'H')
-            {
-                display_character(away_move);
-
-                tinygl_update();
-                break;
-            }
-        }
-
-        if (ir_uart_read_ready_p()) {
-
-            char ch;
-            ch = ir_uart_getc();
-            away_move = ch;
-            PORTC &= (0<<2);
-        }
-    }
+    
+    PORTC &= (0<<2);
     clear_display();
 
-    display_character(away_move);
+    //display_character(away_move);
 
     tinygl_update();
     return char_index;
 }
-
+/*
 char char_transmission(int home_move)
 {
     char away_move = 'G';
@@ -188,6 +204,7 @@ char char_transmission(int home_move)
     return away_move;
 
 }
+*/
 
 int main(void)
 {
@@ -197,9 +214,11 @@ int main(void)
     timer_init();
     ir_uart_init();
     DDRD &= (0<<7);
+    TCCR1A = 0x00;
+    TCCR1B = 0x05;
+    TCCR1C = 0x00;
 
     score_init();
-    DDRD &= (0<<7);
     DDRC |= (1<<2);
     pacer_init(PACER_RATE);
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
