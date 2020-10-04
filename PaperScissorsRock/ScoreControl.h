@@ -3,8 +3,8 @@
 
 typedef struct scoreboard {
     int wins;
-    int lost;
-    int draw;
+    int losses;
+    int draws;
     int played;
 } stats;
 

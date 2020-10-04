@@ -6,6 +6,8 @@
 #include "navswitch.h"
 #include "timer.h"
 #include "navswitch.c"
+#include "led.h"
+#include "button.h"
 #include "ir_uart.h"
 #include "../../fonts/font3x5_1.h"
 #include "../../fonts/font5x7_1.h"
@@ -83,7 +85,7 @@ void display_message_until_joystick_moved(char* message)
 
 void display_character (char character)
 {
-	tinygl_font_set(&font5x7_1);
+    tinygl_font_set(&font5x7_1);
     tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
     char buffer[2];
     buffer[0] = character;
@@ -102,43 +104,53 @@ void pause(uint16_t time)
 
 int index_of_char(char character)
 {
-	int index = 0;
-	if (character == possible_chars[0]) {
-		index = 0;
-	} else if (character == possible_chars[1]) {
-		index = 1;
-	} else if (character == possible_chars[2]) {
-		index = 2;
-	}
-	return index;
+    int index = 0;
+    if (character == possible_chars[0]) {
+        index = 0;
+    } else if (character == possible_chars[1]) {
+        index = 1;
+    } else if (character == possible_chars[2]) {
+        index = 2;
+    }
+    return index;
 }
 
 void wait(uint16_t count)
 {
-	TCNT1 = 0;
+    TCNT1 = 0;
     while (TCNT1 < count) {
-		continue;
-	}
+        continue;
+    }
 }
 
-int pick_move(void)
+void pick_move(int* moves)
 {
 
     clear_display();
     display_message_until_joystick_moved("PICK MOVE");
-    
-	
-	int char_index = 0;
-    char character;
 
-	while (1)
+    int char_index = 0;
+    char character;
+    int away_char = -1;
+    char received_char;
+    bool char_received_success = 0;
+
+
+    while (1)
     {
         pacer_wait ();
         tinygl_update ();
         navswitch_update ();
-        
+        button_update();
+
+        if (button_push_event_p(BUTTON1) & char_received_success) {
+            led_set (LED1, 0);
+            break;
+        }
+
+
         character = possible_chars[char_index];
-        
+
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
             if (char_index == 2) {
                 char_index = 0;
@@ -152,59 +164,40 @@ int pick_move(void)
             } else {
                 char_index--;
             }
-		}
+        }
 
-        /* TODO: Transmit the character over IR on a NAVSWITCH_PUSH
-           event.  */
-        if (navswitch_push_event_p (NAVSWITCH_PUSH))
-			ir_uart_putc(character);
-		
-		
-		if (ir_uart_read_ready_p()) {
-			char ch;
-			ch = ir_uart_getc();
-			character = ch; 
-			char_index = index_of_char(character);
-			for (int i = 0; i <= char_index; i++)
-			{
-				pio_output_toggle(LED_PIO);
-				wait(500);
-			}
-        
-       }
-        display_character (character);
-        
-    }
-    
-    PORTC &= (0<<2);
-    clear_display();
+        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            ir_uart_putc(character);
 
-    //display_character(away_move);
-
-    tinygl_update();
-    return char_index;
-}
-/*
-char char_transmission(int home_move)
-{
-    char away_move = 'G';
-
-    PORTC |= (1<<2);
-    while (away_move == 'G') {
+        }
 
 
         if (ir_uart_read_ready_p()) {
             char ch;
             ch = ir_uart_getc();
-            away_move = ch;
+            received_char = index_of_char(ch);
+            away_char = received_char;
+
         }
+        if (away_char != -1) {
+            char_received_success = 1;
+            led_set (LED1, 1);
+
+        } else {
+            led_set(LED1, 0);
+        }
+
+        display_character (character);
 
     }
 
-    return away_move;
-
+    tinygl_clear();
+    tinygl_update();
+    int home_char = char_index;
+    moves[0] = home_char;
+    moves[1] = away_char;
 }
-*/
+
 
 int main(void)
 {
@@ -213,26 +206,45 @@ int main(void)
     text_init();
     timer_init();
     ir_uart_init();
-    DDRD &= (0<<7);
     TCCR1A = 0x00;
     TCCR1B = 0x05;
     TCCR1C = 0x00;
+    led_init ();
+    button_init ();
 
     score_init();
-    DDRC |= (1<<2);
     pacer_init(PACER_RATE);
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
-    int home_move;
-    char away_move;
-    home_move = pick_move();
+    int moves[2];
+    stats* current_stats;
+    int wins;
+
+    char stats_array[4];
 
 
+    pick_move(moves);
+    int home_move = moves[0];
+    int away_move = moves[1];
+    update_score(home_move, away_move);
+    current_stats = get_score();
 
+    wins = current_stats->wins;
+    char wins_char = wins + 48;
+    stats_array = {current_stats->wins + 48, current_stats->losses + 48,
+        current_stats->draws + 48, current_stats->played + 48}
+
+
+    int stats_index = 0;
 
 
     while (1) {
         pacer_wait();
+        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            if stats_index == 3
+
+        }
+        display_character(wins_char);
         tinygl_update();
 
 

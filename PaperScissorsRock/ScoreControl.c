@@ -3,7 +3,7 @@
 
 typedef struct scoreboard {
     int wins;
-    int lost;
+    int losses;
     int draw;
     int played;
 } stats;
@@ -16,8 +16,8 @@ void score_init(void)
 {
     SCORE = malloc(sizeof(stats));
     SCORE->wins = 0;
-    SCORE->lost = 0;
-    SCORE->draw = 0;
+    SCORE->losses = 0;
+    SCORE->draws = 0;
     SCORE->played = 0;
 }
 
@@ -63,9 +63,9 @@ void update_score(int home, int away)
         SCORE->wins++;
     }
     if (result == 2) {
-        SCORE->lost++;
+        SCORE->losses++;
     } else {
-        SCORE->draw++;
+        SCORE->draws++;
         SCORE->played++;
     }
 }
