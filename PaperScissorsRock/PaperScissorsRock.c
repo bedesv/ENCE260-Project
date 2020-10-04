@@ -222,6 +222,10 @@ int main(void)
 
     char stats_array[4];
 
+    pick_move(moves);
+    int home_move = moves[0];
+    int away_move = moves[1];
+    update_score(home_move, away_move);
 
     pick_move(moves);
     int home_move = moves[0];
