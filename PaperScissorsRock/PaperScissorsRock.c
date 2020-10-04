@@ -18,7 +18,6 @@
 #define MESSAGE_RATE 15
 #define TIMER1_PRESCALE 1024
 #define CPU_F 8000000
-#define LED_PIO PIO_DEFINE(PORT_C, 2)
 
 static const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
@@ -104,7 +103,7 @@ void pause(uint16_t time)
 
 int index_of_char(char character)
 {
-    int index = 0;
+    int index = -1;
     if (character == possible_chars[0]) {
         index = 0;
     } else if (character == possible_chars[1]) {
@@ -251,8 +250,6 @@ int main(void)
         tinygl_update();
 
 
-
-        //update_score(home_move, away_move);
 
     }
 }
