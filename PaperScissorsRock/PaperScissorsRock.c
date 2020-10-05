@@ -4,20 +4,20 @@
 #include "pacer.h"
 #include "tinygl.h"
 #include "navswitch.h"
-#include "timer.h"
-#include "navswitch.c"
+#include "pio.h"
 #include "led.h"
 #include "button.h"
 #include "ir_uart.h"
 #include "../../fonts/font3x5_1.h"
 #include "../../fonts/font5x7_1.h"
-
 #include "ScoreControl.h"
+
 
 #define PACER_RATE 500
 #define MESSAGE_RATE 15
 #define TIMER1_PRESCALE 1024
 #define CPU_F 8000000
+
 
 static const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
@@ -33,6 +33,7 @@ static const pio_t cols[] = {
 static const char possible_chars[] = {
     'P', 'R', 'S'
 };
+
 
 
 int navswitch_moved(void)
@@ -192,11 +193,7 @@ int main(void)
     system_init ();
     navswitch_init();
     text_init();
-    timer_init();
     ir_uart_init();
-    TCCR1A = 0x00;
-    TCCR1B = 0x05;
-    TCCR1C = 0x00;
     led_init ();
     button_init ();
 

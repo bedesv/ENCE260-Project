@@ -75,4 +75,3 @@ char* get_score(stats* score)
     sprintf(return_string, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);
     return return_string;
 }
-

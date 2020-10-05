@@ -1,12 +1,14 @@
 #include "system.h"
 #include <stdlib.h>
 
+//Scoreboard structure
 typedef struct scoreboard {
     int wins;
     int losses;
     int draws;
     int played;
 } stats;
+
 
 // Initialise the scoreboard
 void score_init(stats*);
@@ -27,5 +29,3 @@ void update_score(int home, int away, stats* score);
 
 //Returns the address of the scoreboard
 char* get_score(stats* score);
-
-
