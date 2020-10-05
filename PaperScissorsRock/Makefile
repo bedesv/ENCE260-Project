@@ -16,7 +16,7 @@ all: PaperScissorsRock.out
 
 
 # Compile: create object files from C source files.
-PaperScissorsRock.o: PaperScissorsRock.c ../../../drivers/avr/system.h ../../../drivers/display.h ../../../fonts/font5x7_1.h ../../../utils/font.h ../../../utils/pacer.h ../../../utils/tinygl.h ../../../drivers/avr/ir_uart.h ../../../drivers/navswitch.h ScoreControl.h ../../../drivers/led.h ../../../drivers/button.h ../../../drivers/avr/pio.h
+PaperScissorsRock.o: PaperScissorsRock.c ../../../drivers/avr/system.h ../../../drivers/display.h ../../../drivers/avr/timer0.o ../../../fonts/font5x7_1.h ../../../utils/font.h ../../../utils/pacer.h ../../../utils/tinygl.h ../../../drivers/avr/ir_uart.h ../../../drivers/navswitch.h ScoreControl.h PlayerSelection.h Display.h ../../../drivers/led.h ../../../drivers/button.h ../../../drivers/avr/pio.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 system.o: ../../../drivers/avr/system.c ../../../drivers/avr/system.h
@@ -49,14 +49,13 @@ ir_uart.o: ../../../drivers/avr/ir_uart.c ../../../drivers/avr/ir_uart.h ../../.
 usart1.o: ../../../drivers/avr/usart1.c ../../../drivers/avr/system.h ../../../drivers/avr/usart1.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-timer0.o: ../../../drivers/avr/timer0.c ../../../drivers/avr/bits.h ../../../drivers/avr/prescale.h ../../../drivers/avr/system.h ../../../drivers/avr/timer0.h
-	$(CC) -c $(CFLAGS) $< -o $@
-
 prescale.o: ../../../drivers/avr/prescale.c ../../../drivers/avr/prescale.h ../../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 ScoreControl.o: ScoreControl.c ScoreControl.h  ../../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
+
+PlayerSelection.o: PlayerSelection.c PlayerSelection.h ../../../drivers/avr/system.h
 
 led.o: ../../../drivers/led.c ../../../drivers/avr/pio.h ../../../drivers/avr/system.h ../../../drivers/led.h
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -67,8 +66,14 @@ button.o: ../../../drivers/button.c ../../../drivers/avr/pio.h ../../../drivers/
 navswitch.o: ../../../drivers/navswitch.c ../../../drivers/avr/pio.h ../../../drivers/navswitch.h ../../../drivers/avr/delay.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
+Display.o: Display.c Display.h ../../../drivers/avr/pio.h ../../../utils/tinygl.h ../../../utils/pacer.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
+timer0.o: ../../../drivers/avr/timer0.c ../../../drivers/avr/timer0.h
+	$(CC) -c $(CFLAGS) $< -o $@
+
 # Link: create ELF output file from object files.
-PaperScissorsRock.out: PaperScissorsRock.o system.o pio.o timer.o display.o ledmat.o font.o pacer.o tinygl.o ir_uart.o usart1.o timer0.o prescale.o ScoreControl.o led.o button.o navswitch.o
+PaperScissorsRock.out: PaperScissorsRock.o system.o pio.o timer.o display.o ledmat.o font.o pacer.o tinygl.o ir_uart.o usart1.o timer0.o prescale.o ScoreControl.o PlayerSelection.o led.o button.o navswitch.o Display.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

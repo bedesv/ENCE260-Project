@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//Scoreboard structure
 typedef struct scoreboard {
     int wins;
     int losses;
@@ -21,7 +22,7 @@ void score_init(stats* score)
 
 /*Checks who won the round
  * Actions:
- * P R S = 0 1 2
+ * P R S = 0 1 2 (respectively)
  *
  * Result:
  * 0 = draw

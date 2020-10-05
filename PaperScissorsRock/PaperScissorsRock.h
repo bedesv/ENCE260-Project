@@ -1,20 +1,25 @@
+#include <string.h>
+#include <stdbool.h>
+
 #include "system.h"
+#include "pacer.h"
+#include "tinygl.h"
+#include "navswitch.h"
+#include "pio.h"
+#include "led.h"
+#include "button.h"
+#include "ir_uart.h"
+#include "../../fonts/font3x5_1.h"
 #include "ScoreControl.h"
+#include "PlayerSelection.h"
+#include "Display.h"
 
-static const pio_t rows[];
+#define PACER_RATE 500
+#define MESSAGE_RATE 15
 
-static const pio_t cols[];
 
-static const char possible_chars[];
-
-int navswitch_moved(void);
 
 void text_init(void);
 
-void clear_display(void);
 
-void display_message_until_joystick_moved(char* message);
-
-void display_character (char character);
-
-void pause(uint16_t time);
+void game_init(void);
