@@ -1,5 +1,6 @@
 #include "system.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct scoreboard {
     int wins;
@@ -9,16 +10,13 @@ typedef struct scoreboard {
 } stats;
 
 
-stats* SCORE = NULL;
-
 // Initialise the scoreboard
-void score_init(void)
+void score_init(stats* score)
 {
-    SCORE = malloc(sizeof(stats));
-    SCORE->wins = 0;
-    SCORE->losses = 0;
-    SCORE->draws = 0;
-    SCORE->played = 0;
+    score->wins = 0;
+    score->losses = 0;
+    score->draws = 0;
+    score->played = 0;
 }
 
 /*Checks who won the round
@@ -54,32 +52,27 @@ int check_selections(int home, int away)
 }
 
 //Checks current round and updates scoreboard
-void update_score(int home, int away)
+void update_score(int home, int away, stats* score)
 {
-    int result = 0;
+    int result = -1;
     result = check_selections(home, away);
     if (result == 1) {
-        SCORE->wins++;
-
-    } else if (result == 2) {
-        SCORE->losses++;
-    } else {
-        SCORE->draws++;
-
+        score->wins++;
     }
-    SCORE->played++;
+    if (result == 2) {
+        score->losses++;
+    }
+    if (result == 0) {
+        score->draws++;
+    }
+    score->played++;
 }
 
 //Returns the address of the scoreboard
-stats* get_score(void)
+char* get_score(stats* score)
 {
-    return SCORE;
+    char* return_string = "";
+    sprintf(return_string, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);
+    return return_string;
 }
-
-//Frees the malloc (deletes scoreboard)
-void free_score(void)
-{
-    free(SCORE);
-}
-
 

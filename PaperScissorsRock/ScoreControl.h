@@ -9,7 +9,7 @@ typedef struct scoreboard {
 } stats;
 
 // Initialise the scoreboard
-void score_init(void);
+void score_init(stats*);
 
 /*Checks who won the round
  * Actions:
@@ -23,12 +23,9 @@ void score_init(void);
 int check_selections(int home, int away);
 
 //Checks current round and updates scoreboard
-void update_score(int home, int away);
+void update_score(int home, int away, stats* score);
 
 //Returns the address of the scoreboard
-stats* get_score(void);
-
-//Frees the malloc (deletes scoreboard)
-void free_score(void);
+char* get_score(stats* score);
 
 

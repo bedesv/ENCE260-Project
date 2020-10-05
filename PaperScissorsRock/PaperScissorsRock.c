@@ -70,6 +70,7 @@ void clear_display(void)
 void display_message_until_joystick_moved(char* message)
 {
     tinygl_font_set(&font3x5_1);
+    tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
     tinygl_text(message);
     int moved = 0;
     while (moved != 1) {
@@ -131,12 +132,11 @@ void pick_move(int* moves)
     int char_index = 0;
     char character;
     int away_char = -1;
-    char received_char;
+    char received_char = -1;
     bool char_received_success = 0;
+    led_set (LED1, 0);
 
-
-    while (1)
-    {
+    while (1) {
         pacer_wait ();
         tinygl_update ();
         navswitch_update ();
@@ -146,8 +146,6 @@ void pick_move(int* moves)
             led_set (LED1, 0);
             break;
         }
-
-
         character = possible_chars[char_index];
 
         if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
@@ -164,30 +162,21 @@ void pick_move(int* moves)
                 char_index--;
             }
         }
-
         if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
             ir_uart_putc(character);
 
         }
-
-
         if (ir_uart_read_ready_p()) {
             char ch;
             ch = ir_uart_getc();
             received_char = index_of_char(ch);
-            away_char = received_char;
-
         }
-        if (away_char != -1) {
+        if (received_char != -1) {
+            away_char = received_char;
             char_received_success = 1;
             led_set (LED1, 1);
-
-        } else {
-            led_set(LED1, 0);
         }
-
         display_character (character);
-
     }
 
     tinygl_clear();
@@ -211,45 +200,23 @@ int main(void)
     led_init ();
     button_init ();
 
-    score_init();
+    stats score;
+    score_init(&score);
     pacer_init(PACER_RATE);
     display_message_until_joystick_moved("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
+
     int moves[2];
-    stats* current_stats;
+    char* current_stats;
+    int home_move;
+    int away_move;
 
-
-
-
-    pick_move(moves);
-    int home_move = moves[0];
-    int away_move = moves[1];
-    update_score(home_move, away_move);
-    current_stats = get_score();
-
-    char stats_array[] = {current_stats->wins + 48, current_stats->losses + 48,
-        current_stats->draws + 48, current_stats->played + 48};
-
-
-    int stats_index = 0;
-
-
-    while (1) {
-        pacer_wait();
-        navswitch_update();
-        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            if (stats_index == 3) {
-                stats_index = 0;
-            } else {
-                stats_index++;
-            }
-
-        }
-
-        display_character(stats_array[stats_index]);
-        tinygl_update();
-
-
-
+    while(1) {
+        pick_move(moves);
+        home_move = moves[0];
+        away_move = moves[1];
+        update_score(home_move, away_move, &score);
+        current_stats = get_score(&score);
+        display_message_until_joystick_moved(current_stats);
     }
 }
