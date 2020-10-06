@@ -55,7 +55,7 @@ prescale.o: ../../../drivers/avr/prescale.c ../../../drivers/avr/prescale.h ../.
 ScoreControl.o: ScoreControl.c ScoreControl.h  ../../../drivers/avr/system.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-PlayerSelection.o: PlayerSelection.c PlayerSelection.h ../../../drivers/avr/system.h
+PlayerSelection.o: PlayerSelection.c PlayerSelection.h ../../../drivers/avr/system.h ../../../utils/pacer.h ../../../drivers/button.h
 
 led.o: ../../../drivers/led.c ../../../drivers/avr/pio.h ../../../drivers/avr/system.h ../../../drivers/led.h
 	$(CC) -c $(CFLAGS) $< -o $@

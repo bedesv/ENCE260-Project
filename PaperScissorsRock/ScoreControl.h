@@ -1,6 +1,12 @@
+/** @file   ScoreControl.h
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Score functions header
+
+    Simple scorekeeping system
+*/
+
 #include "system.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 //Scoreboard structure
 typedef struct scoreboard {

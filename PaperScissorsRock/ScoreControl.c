@@ -1,3 +1,11 @@
+/** @file   ScoreControl.c
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Score functions module
+
+    This module defines the functions to keep track of the score
+*/
+
 #include "system.h"
 #include <stdlib.h>
 #include <stdio.h>

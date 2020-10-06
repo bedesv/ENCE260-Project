@@ -1,6 +1,14 @@
+/** @file   PlayerSelection.h
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Module for player move selection and IR transmission
+
+    This module defines the
+*/
+
 #include "system.h"
 
-
+/* Array of possible characters the player could select */
 static const char possible_chars[] ;
 
 /* Returns the index of the character in possible chars array */
@@ -22,8 +30,6 @@ void send_move(char* character);
 
 /* Recieves a IR transmission and assigns it to the received char */
 void receive_move (int* received_char);
-
-
 
 /* Utilises the above functions to allow the player to pick their move
    for this round and sends it to the other player. It also receives

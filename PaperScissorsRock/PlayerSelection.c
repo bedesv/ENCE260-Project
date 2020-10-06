@@ -1,10 +1,21 @@
+/** @file   PlayerSelection.c
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Player Selection module
+
+    This module defines the
+*/
+
 #include "system.h"
 #include "ir_uart.h"
 #include "led.h"
 #include "navswitch.h"
 #include "tinygl.h"
 #include "pio.h"
+#include "pacer.h"
+#include "button.h"
 #include "PaperScissorsRock.h"
+#include "Display.h"
 
 // Defines the possible characters in the game
 static const char possible_chars[] = {

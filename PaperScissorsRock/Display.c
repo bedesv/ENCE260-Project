@@ -1,3 +1,11 @@
+/** @file   Display.c
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Display module
+
+    This module defines the functions to use the display
+*/
+
 #include "system.h"
 #include "tinygl.h"
 #include "navswitch.h"
@@ -7,13 +15,14 @@
 #include "../../fonts/font5x7_1.h"
 
 
-
+/* Matrix rows PIO ports */
 static const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
     LEDMAT_ROW4_PIO, LEDMAT_ROW5_PIO, LEDMAT_ROW6_PIO,
     LEDMAT_ROW7_PIO
 };
 
+/* Matrix columns PIO ports */
 static const pio_t cols[] = {
     LEDMAT_COL1_PIO, LEDMAT_COL2_PIO, LEDMAT_COL3_PIO,
     LEDMAT_COL4_PIO, LEDMAT_COL5_PIO
@@ -21,7 +30,7 @@ static const pio_t cols[] = {
 
 
 
-// Returns 1 if navswitch has been moved in any direction
+/* Returns 1 if navswitch has been moved in any direction */
 int navswitch_moved(void)
 {
     int moved = 0;
@@ -34,7 +43,7 @@ int navswitch_moved(void)
 }
 
 
-// Clears the display
+/* Clears the display */
 void clear_display(void)
 {
     for (int row = 0; row < 7; row++) {
@@ -65,7 +74,7 @@ void display_message(char* message)
 }
 
 
-// Displays a single char
+/* Displays a single char */
 void display_character(char character)
 {
     tinygl_font_set(&font5x7_1);
