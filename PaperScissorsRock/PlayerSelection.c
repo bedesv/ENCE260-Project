@@ -25,21 +25,22 @@ int index_of_char(char character)
     return index;
 }
 
-// Checks if the player has changed their character selection and returns the appropriate index
+/* Checks if the player has changed their character selection and
+   changes char_index appropriately */
 void selection_changed(int* char_index)
 {
     if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
         if (*char_index == 2) {
             *char_index = 0;
         } else {
-            char_index ++;
+            *char_index = *char_index + 1;
         }
     }
     if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
         if (*char_index == 0) {
             *char_index = 2;
         } else {
-            char_index--;
+            *char_index = *char_index - 1;
         }
     }
 
@@ -54,12 +55,15 @@ void check_received_char(int* received_char, int* away_char, bool* char_received
     }
 }
 
-void send_and_receive_moves(char* character, int* received_char)
+void send_move(char* character)
 {
     if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
         ir_uart_putc(*character);
     }
+}
 
+void receive_move(int* received_char)
+{
     if (ir_uart_read_ready_p()) {
         char ch;
         ch = ir_uart_getc();
@@ -76,8 +80,8 @@ void pick_move(int* moves)
     char character;
     int away_char = -1;
     int received_char = -1;
+    bool char_received_success = 0;
 
-    bool char_received_success = 0;                     // ?
     led_off;
 
     while (1) {
@@ -93,7 +97,8 @@ void pick_move(int* moves)
 
         character = possible_chars[char_index];
         selection_changed(&char_index);
-        send_and_receive_moves(&character, &received_char);
+        send_move(&character);
+        receive_move(&received_char);
         check_received_char(&received_char, &away_char, &char_received_success);
 
         display_character(character);

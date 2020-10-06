@@ -34,7 +34,7 @@ int navswitch_moved(void)
 }
 
 
-// makes the display blank
+// Clears the display
 void clear_display(void)
 {
     for (int row = 0; row < 7; row++) {
@@ -47,7 +47,8 @@ void clear_display(void)
 }
 
 
-// Displays the given string message until the navswitch is moved
+/* Displays the given string message using scrolling tinygl until the
+   navswitch is moved */
 void display_message(char* message)
 {
     int moved = 0;
