@@ -16,6 +16,8 @@
 
 #define PACER_RATE 500
 #define MESSAGE_RATE 15
+#define led_on led_set (LED1, 1)
+#define led_off led_set (LED1, 0)
 
 
 
@@ -61,6 +63,11 @@ int main(void)
         away_move = moves[1];
         update_score(home_move, away_move, &score);
         current_stats = get_score(&score);
+        if (score.wins >= score.losses) {
+            led_on;
+        } else {
+            led_off;
+        }
         display_message(current_stats);
     }
 }

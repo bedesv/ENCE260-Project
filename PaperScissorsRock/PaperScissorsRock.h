@@ -16,6 +16,8 @@
 
 #define PACER_RATE 500
 #define MESSAGE_RATE 15
+#define led_on led_set (LED1, 1)
+#define led_off led_set (LED1, 0)
 
 
 
