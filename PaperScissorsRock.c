@@ -80,7 +80,6 @@ int main(void)
         } else {
             led_off;
         }
-        led_on;
         display_message(current_stats);
         free(current_stats);
     }
