@@ -1,6 +1,10 @@
-#include "system.h"
-#include "ScoreControl.h"
+/** @file   PaperScissorsRock.h
+    @author Bede Skinner-Vennell, Jack Warburton
+    @date   7 October 2020
+    @brief  Main Function header
 
+    This module defines the
+*/
 
 #define PACER_RATE 500
 #define MESSAGE_RATE 15

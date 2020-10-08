@@ -6,8 +6,6 @@
     This module defines the
 */
 
-#include "system.h"
-
 
 const char possible_chars[3];
 

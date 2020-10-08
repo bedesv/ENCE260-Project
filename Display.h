@@ -6,8 +6,6 @@
     This module defines the
 */
 
-#include "system.h"
-
 /* Defines arrays of PIO ports for the rows and colums of the matrix
    respectively - to make using the display easier */
 const pio_t rows[7] ;
