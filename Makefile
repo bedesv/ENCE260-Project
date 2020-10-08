@@ -21,7 +21,7 @@ all: PaperScissorsRock.out
 
 
 # Compile: create object files from C source files.
-PaperScissorsRock.o: PaperScissorsRock.c $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/display.h $(DRIVERDIR)/avr/timer0.o $(FONTSDIR)/font5x7_1.h $(UTILSDIR)/font.h $(UTILSDIR)/pacer.h $(UTILSDIR)/tinygl.h $(DRIVERDIR)/avr/ir_uart.h $(DRIVERDIR)/navswitch.h ScoreControl.h $(DRIVERDIR)/led.h $(DRIVERDIR)/button.h $(DRIVERDIR)/avr/pio.h PlayerSelection.h Display.h
+PaperScissorsRock.o: PaperScissorsRock.c $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/display.h $(DRIVERDIR)/avr/timer0.o $(FONTSDIR)/font5x7_1.h $(UTILSDIR)/font.h $(UTILSDIR)/pacer.h $(UTILSDIR)/tinygl.h $(DRIVERDIR)/avr/ir_uart.h $(DRIVERDIR)/navswitch.h ScoreControl.h $(DRIVERDIR)/led.h $(DRIVERDIR)/button.h $(DRIVERDIR)/avr/pio.h PlayerSelection.h Visuals.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 system.o: $(DRIVERDIR)/avr/system.c $(DRIVERDIR)/avr/system.h
@@ -75,11 +75,11 @@ navswitch.o: $(DRIVERDIR)/navswitch.c $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswi
 timer0.o: $(DRIVERDIR)/avr/timer0.c $(DRIVERDIR)/avr/timer0.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-Display.o:  Display.c Display.h  $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswitch.h $(UTILSDIR)/tinygl.h $(UTILSDIR)/pacer.h
+Visuals.o:  Visuals.c Visuals.h  $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswitch.h $(UTILSDIR)/tinygl.h $(UTILSDIR)/pacer.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # Link: create ELF output file from object files.
-PaperScissorsRock.out: PaperScissorsRock.o system.o pio.o timer.o display.o ledmat.o font.o pacer.o tinygl.o ir_uart.o usart1.o timer0.o prescale.o ScoreControl.o led.o button.o navswitch.o PlayerSelection.o Display.o
+PaperScissorsRock.out: PaperScissorsRock.o system.o pio.o timer.o display.o ledmat.o font.o pacer.o tinygl.o ir_uart.o usart1.o timer0.o prescale.o ScoreControl.o led.o button.o navswitch.o PlayerSelection.o Visuals.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 
