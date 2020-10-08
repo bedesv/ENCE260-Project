@@ -1,9 +1,10 @@
 /** @file   PlayerSelection.c
     @author Bede Skinner-Vennell, Jack Warburton
     @date   7 October 2020
-    @brief  Player Selection module
+    @brief  Module for player move selection and IR transmission
 
-    This module defines the
+    This module includes the functions used to allow the player to select
+    their move and then transmits
 */
 
 #include "system.h"
@@ -14,13 +15,15 @@
 #include "pio.h"
 #include "pacer.h"
 #include "button.h"
+
 #include "PaperScissorsRock.h"
 
 
+/* Array with the possible moves the player can select */
 const char possible_chars[] = {
     'P', 'R', 'S'
 };
-// Returns the index of the character in possible_chars array
+/* Returns the index of the given character in possible chars array */
 int index_of_char(char character)
 {
     int index = -1;
@@ -34,8 +37,8 @@ int index_of_char(char character)
     return index;
 }
 
-/* Checks if the player has changed their character selection and
-   changes char_index appropriately */
+/* Checks if the player has changed their selection and updates
+   char_index with the appropriate value */
 void selection_changed(int* char_index)
 {
     if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
@@ -52,9 +55,12 @@ void selection_changed(int* char_index)
             *char_index = *char_index - 1;
         }
     }
-
 }
 
+/* Checks if the character received is a valid move from the other
+   player rather than interference then updates the away_char integer and
+   the char_received_success bool to allow the player to exit
+   transmisson mode if it is */
 void check_received_char(int* received_char, int* away_char, bool* char_received_success)
 {
     if (*received_char != -1) {
@@ -64,6 +70,8 @@ void check_received_char(int* received_char, int* away_char, bool* char_received
     }
 }
 
+/* Checks if the player has pressed down on the joystick to send their
+   character selection and sends it to the other player if so */
 void send_move(char* character)
 {
     if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
@@ -71,6 +79,7 @@ void send_move(char* character)
     }
 }
 
+/* Recieves an IR transmission and assigns it to the received char */
 void receive_move(int* received_char)
 {
     if (ir_uart_read_ready_p()) {
@@ -80,9 +89,10 @@ void receive_move(int* received_char)
     }
 }
 
-
-
-// Lets player make their decison: Paper/Scissors/Rock
+/* Utilises the above functions to allow the player to pick their move
+   for this round and sends it to the other player. It also receives
+   the other players move and then stores both moves in an array for the
+   main function to use for score keeping */
 void pick_move(int* moves)
 {
     int char_index = 0;

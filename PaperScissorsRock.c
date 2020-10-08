@@ -24,7 +24,7 @@
 
 #include "ScoreControl.h"
 #include "PlayerSelection.h"
-#include "Display.h"
+#include "Visuals.h"
 
 
 #define PACER_RATE 500
@@ -66,7 +66,6 @@ void display_message(char* message)
         moved = navswitch_moved();
     }
     clear_display();
-
 }
 
 int main(void)
