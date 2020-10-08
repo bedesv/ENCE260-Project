@@ -19,5 +19,5 @@ void text_init(void);
 /* Sets up the system components */
 void game_init(void);
 
-// Displays a message across the screen
+/* Displays a message across the screen */
 void display_message(char* message);

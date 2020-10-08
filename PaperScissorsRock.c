@@ -57,7 +57,7 @@ void game_init(void)
     pacer_init(PACER_RATE);
 }
 
-// Displays a message across the screen
+/* Displays a message across the screen */
 void display_message(char* message)
 {
     tinygl_font_set(&font3x5_1);

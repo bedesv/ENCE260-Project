@@ -15,7 +15,6 @@ SIZE = avr-size
 DEL = rm
 
 
-
 # Default target.
 all: PaperScissorsRock.out
 
@@ -75,7 +74,7 @@ navswitch.o: $(DRIVERDIR)/navswitch.c $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswi
 timer0.o: $(DRIVERDIR)/avr/timer0.c $(DRIVERDIR)/avr/timer0.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
-Visuals.o:  Visuals.c Visuals.h  $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswitch.h $(UTILSDIR)/tinygl.h $(UTILSDIR)/pacer.h
+Visuals.o:  Visuals.c Visuals.h  $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/avr/pio.h $(DRIVERDIR)/navswitch.h $(UTILSDIR)/tinygl.h $(UTILSDIR)/pacer.h PlayerSelection.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # Link: create ELF output file from object files.

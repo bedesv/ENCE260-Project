@@ -17,6 +17,7 @@
 #include "button.h"
 
 #include "PaperScissorsRock.h"
+#include "Visuals.h"
 
 
 /* Array with the possible moves the player can select */
