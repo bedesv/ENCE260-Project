@@ -53,7 +53,7 @@ void clear_display(void)
     }
 }
 
-void display_character (char character)
+void display_character(char character)
 {
     tinygl_font_set(&font5x7_1);
     tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);

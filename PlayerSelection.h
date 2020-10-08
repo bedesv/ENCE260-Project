@@ -7,7 +7,8 @@
     their move and then transmits
 */
 
-/* Array with the possible moves the player can select */
+/* Array with the possible moves the player can select.
+   There are three moves P, S, R */
 const char possible_chars[3];
 
 /* Returns the index of the given character in possible chars array */

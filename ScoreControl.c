@@ -3,14 +3,14 @@
     @date   7 October 2020
     @brief  Score functions module
 
-    This module defines the functions to keep track of the score
+    This module defines the functions to manage the score on each board
 */
 
 #include "system.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-
+/* The structure of the scoreboard */
 typedef struct scoreboard {
     int wins;
     int losses;
@@ -18,8 +18,7 @@ typedef struct scoreboard {
     int played;
 } stats;
 
-
-// Initialise the scoreboard
+/* Initialise the scoreboard */
 void score_init(stats* score)
 {
     score->wins = 0;
@@ -30,7 +29,7 @@ void score_init(stats* score)
 
 /*Checks who won the round
  * Actions:
- * P R S = 0 1 2
+ * P R S = 0 1 2 -possible_chars list in PlayerSelection.c
  *
  * Result:
  * 0 = draw
@@ -60,7 +59,7 @@ int check_selections(int home, int away)
     return result;
 }
 
-//Checks current round and updates scoreboard
+/* Checks the current round and updates scoreboard */
 void update_score(int home, int away, stats* score)
 {
     int result = -1;
@@ -77,7 +76,7 @@ void update_score(int home, int away, stats* score)
     score->played++;
 }
 
-//Returns the address of the scoreboard
+/* Stores the games current score in a provided space */
 void get_score(stats* score, char* current_stats)
 {
     sprintf(current_stats, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);

@@ -19,7 +19,7 @@ int navswitch_moved(void);
 void clear_display(void);
 
 /* Displays the given string message until the navswitch is moved */
-//void display_message(char* message);
+// ***********void display_message(char* message);****************
 
 /* Displays a single character */
 void display_character(char character);

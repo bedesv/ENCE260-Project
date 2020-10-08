@@ -23,6 +23,7 @@
 const char possible_chars[] = {
     'P', 'R', 'S'
 };
+
 /* Returns the index of the given character in possible chars array */
 int index_of_char(char character)
 {

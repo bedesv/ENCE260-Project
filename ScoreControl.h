@@ -1,12 +1,12 @@
-/** @file   ScoreControl.h
+/** @file   ScoreControl.c
     @author Bede Skinner-Vennell, Jack Warburton
     @date   7 October 2020
-    @brief  Score functions header
+    @brief  Score functions module
 
-    Simple scorekeeping system
+    This module defines the functions to manage the score on each board
 */
 
-//Scoreboard structure
+/* The structure of the scoreboard */
 typedef struct scoreboard {
     int wins;
     int losses;
@@ -14,13 +14,12 @@ typedef struct scoreboard {
     int played;
 } stats;
 
-
-// Initialise the scoreboard
-void score_init(stats*);
+/* Initialise the scoreboard */
+void score_init(stats* score);
 
 /*Checks who won the round
  * Actions:
- * P R S = 0 1 2
+ * P R S = 0 1 2 -possible_chars list in PlayerSelection.c
  *
  * Result:
  * 0 = draw
@@ -29,8 +28,8 @@ void score_init(stats*);
  */
 int check_selections(int home, int away);
 
-//Checks current round and updates scoreboard
+/* Checks the current round and updates scoreboard */
 void update_score(int home, int away, stats* score);
 
-//Returns the address of the scoreboard
-void get_score(stats* score, char* current_score);
+/* Stores the games current score in a provided space */
+void get_score(stats* score, char* current_stats);
