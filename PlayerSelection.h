@@ -9,6 +9,8 @@
 #include "system.h"
 
 
+const char possible_chars[3];
+
 /* Returns the index of the character in possible chars array */
 int index_of_char(char character);
 

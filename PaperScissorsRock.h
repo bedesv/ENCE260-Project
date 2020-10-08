@@ -4,8 +4,6 @@
 
 #define PACER_RATE 500
 #define MESSAGE_RATE 15
-#define TIMER1_PRESCALE 1024
-#define CPU_F 8000000
 
 #define led_on led_set (LED1, 1)
 #define led_off led_set (LED1, 0)
@@ -22,7 +20,7 @@ void text_init(void);
 
 void clear_display(void);
 
-void display_message_until_joystick_moved(char* message);
+void display_message(char* message);
 
 void display_character (char character);
 
