@@ -30,6 +30,17 @@ void text_init(void)
     tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
 }
 
+void game_init(void)
+{
+    system_init ();
+    navswitch_init();
+    text_init();
+    ir_uart_init();
+    led_init ();
+    button_init ();
+    pacer_init(PACER_RATE);
+}
+
 void display_message(char* message)
 {
     tinygl_font_set(&font3x5_1);
@@ -48,27 +59,21 @@ void display_message(char* message)
 
 int main(void)
 {
-    system_init ();
-    navswitch_init();
-    text_init();
-    ir_uart_init();
-    led_init ();
-    button_init ();
+    game_init();
 
     stats score;
     score_init(&score);
-    pacer_init(PACER_RATE);
+
     display_message("WELCOME TO PAPER SCISSORS ROCK");
     pacer_wait();
 
     int moves[2];
-    char* current_stats;
+    char* current_stats = malloc(30);
     int home_move;
     int away_move;
 
     while(1) {
         clear_display();
-        current_stats = malloc(30);
         display_message("PICK MOVE");
         pick_move(moves);
         home_move = moves[0];
@@ -81,6 +86,7 @@ int main(void)
             led_off;
         }
         display_message(current_stats);
-        free(current_stats);
+
     }
+    free(current_stats);
 }

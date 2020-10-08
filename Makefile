@@ -6,9 +6,10 @@
 # Definitions.
 DRIVERDIR = ../../drivers
 UTILSDIR = ../../utils
+FONTSDIR = ../../fonts
 
 CC = avr-gcc
-CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I$(UTILSDIR) -I../../fonts -I$(DRIVERDIR) -I$(DRIVERDIR)/avr
+CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I$(UTILSDIR) -I$(FONTSDIR) -I$(DRIVERDIR) -I$(DRIVERDIR)/avr
 OBJCOPY = avr-objcopy
 SIZE = avr-size
 DEL = rm
@@ -20,7 +21,7 @@ all: PaperScissorsRock.out
 
 
 # Compile: create object files from C source files.
-PaperScissorsRock.o: PaperScissorsRock.c $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/display.h $(DRIVERDIR)/avr/timer0.o ../../fonts/font5x7_1.h $(UTILSDIR)/font.h $(UTILSDIR)/pacer.h $(UTILSDIR)/tinygl.h $(DRIVERDIR)/avr/ir_uart.h $(DRIVERDIR)/navswitch.h ScoreControl.h $(DRIVERDIR)/led.h $(DRIVERDIR)/button.h $(DRIVERDIR)/avr/pio.h PlayerSelection.h Display.h
+PaperScissorsRock.o: PaperScissorsRock.c $(DRIVERDIR)/avr/system.h $(DRIVERDIR)/display.h $(DRIVERDIR)/avr/timer0.o $(FONTSDIR)/font5x7_1.h $(UTILSDIR)/font.h $(UTILSDIR)/pacer.h $(UTILSDIR)/tinygl.h $(DRIVERDIR)/avr/ir_uart.h $(DRIVERDIR)/navswitch.h ScoreControl.h $(DRIVERDIR)/led.h $(DRIVERDIR)/button.h $(DRIVERDIR)/avr/pio.h PlayerSelection.h Display.h
 	$(CC) -c $(CFLAGS) $< -o $@
 
 system.o: $(DRIVERDIR)/avr/system.c $(DRIVERDIR)/avr/system.h
