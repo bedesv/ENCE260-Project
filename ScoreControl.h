@@ -28,4 +28,4 @@ int check_selections(int home, int away);
 void update_score(int home, int away, stats* score);
 
 //Returns the address of the scoreboard
-char* get_score(stats* score);
+void get_score(stats* score, char* current_score);

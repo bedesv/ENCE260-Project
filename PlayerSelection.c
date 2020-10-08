@@ -17,6 +17,9 @@
 #include "PaperScissorsRock.h"
 
 
+const char possible_chars[] = {
+    'P', 'R', 'S'
+};
 // Returns the index of the character in possible_chars array
 int index_of_char(char character)
 {

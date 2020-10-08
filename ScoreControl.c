@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
 typedef struct scoreboard {
     int wins;
     int losses;
@@ -69,9 +70,7 @@ void update_score(int home, int away, stats* score)
 }
 
 //Returns the address of the scoreboard
-char* get_score(stats* score)
+void get_score(stats* score, char* current_stats)
 {
-    char* return_string = malloc(sizeof("W999 L999 D999 P999"));
-    sprintf(return_string, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);
-    return return_string;
+    sprintf(current_stats, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);
 }
