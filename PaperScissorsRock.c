@@ -11,6 +11,7 @@
 #include "../../fonts/font3x5_1.h"
 #include "../../fonts/font5x7_1.h"
 #include "ScoreControl.h"
+#include "PlayerSelection.h"
 
 
 #define PACER_RATE 500
@@ -19,18 +20,18 @@
 #define CPU_F 8000000
 
 
-static const pio_t rows[] = {
+const pio_t rows[] = {
     LEDMAT_ROW1_PIO, LEDMAT_ROW2_PIO, LEDMAT_ROW3_PIO,
     LEDMAT_ROW4_PIO, LEDMAT_ROW5_PIO, LEDMAT_ROW6_PIO,
     LEDMAT_ROW7_PIO
 };
- 
-static const pio_t cols[] = {
+
+const pio_t cols[] = {
     LEDMAT_COL1_PIO, LEDMAT_COL2_PIO, LEDMAT_COL3_PIO,
     LEDMAT_COL4_PIO, LEDMAT_COL5_PIO
 };
 
-static const char possible_chars[] = {
+const char possible_chars[] = {
     'P', 'R', 'S'
 };
 
@@ -103,19 +104,6 @@ void pause(uint16_t time)
     }
 }
 
-int index_of_char(char character)
-{
-    int index = -1;
-    if (character == possible_chars[0]) {
-        index = 0;
-    } else if (character == possible_chars[1]) {
-        index = 1;
-    } else if (character == possible_chars[2]) {
-        index = 2;
-    }
-    return index;
-}
-
 void wait(uint16_t count)
 {
     TCNT1 = 0;
@@ -123,70 +111,6 @@ void wait(uint16_t count)
         continue;
     }
 }
-
-void pick_move(int* moves)
-{
-
-    clear_display();
-    display_message_until_joystick_moved("PICK MOVE");
-
-    int char_index = 0;
-    char character;
-    int away_char = -1;
-    char received_char = -1;
-    bool char_received_success = 0;
-    led_set (LED1, 0);
-
-    while (1) {
-        pacer_wait ();
-        tinygl_update ();
-        navswitch_update ();
-        button_update();
-
-        if (button_push_event_p(BUTTON1) & char_received_success) {
-            led_set (LED1, 0);
-            break;
-        }
-        character = possible_chars[char_index];
-
-        if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
-            if (char_index == 2) {
-                char_index = 0;
-            } else {
-                char_index ++;
-            }
-        }
-        if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
-            if (char_index == 0) {
-                char_index = 2;
-            } else {
-                char_index--;
-            }
-        }
-        if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-            ir_uart_putc(character);
-
-        }
-        if (ir_uart_read_ready_p()) {
-            char ch;
-            ch = ir_uart_getc();
-            received_char = index_of_char(ch);
-        }
-        if (received_char != -1) {
-            away_char = received_char;
-            char_received_success = 1;
-            led_set (LED1, 1);
-        }
-        display_character (character);
-    }
-
-    tinygl_clear();
-    tinygl_update();
-    int home_char = char_index;
-    moves[0] = home_char;
-    moves[1] = away_char;
-}
-
 
 int main(void)
 {

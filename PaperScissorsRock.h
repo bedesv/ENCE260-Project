@@ -1,11 +1,20 @@
 #include "system.h"
 #include "ScoreControl.h"
 
-static const pio_t rows[];
 
-static const pio_t cols[];
+#define PACER_RATE 500
+#define MESSAGE_RATE 15
+#define TIMER1_PRESCALE 1024
+#define CPU_F 8000000
 
-static const char possible_chars[];
+#define led_on led_set (LED1, 1)
+#define led_off led_set (LED1, 0)
+
+const pio_t rows[7];
+
+const pio_t cols[5];
+
+const char possible_chars[3];
 
 int navswitch_moved(void);
 

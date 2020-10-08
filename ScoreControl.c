@@ -71,7 +71,7 @@ void update_score(int home, int away, stats* score)
 //Returns the address of the scoreboard
 char* get_score(stats* score)
 {
-    char* return_string = "";
+    char* return_string = malloc(sizeof("W999 L999 D999 P999"));
     sprintf(return_string, "W%d L%d D%d P%d", score->wins, score->losses, score->draws, score->played);
     return return_string;
 }
