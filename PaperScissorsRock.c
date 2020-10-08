@@ -24,7 +24,7 @@ static const pio_t rows[] = {
     LEDMAT_ROW4_PIO, LEDMAT_ROW5_PIO, LEDMAT_ROW6_PIO,
     LEDMAT_ROW7_PIO
 };
-
+ 
 static const pio_t cols[] = {
     LEDMAT_COL1_PIO, LEDMAT_COL2_PIO, LEDMAT_COL3_PIO,
     LEDMAT_COL4_PIO, LEDMAT_COL5_PIO
