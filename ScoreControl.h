@@ -20,7 +20,6 @@ void score_init(stats* score);
 /*Checks who won the round
  * Actions:
  * P R S = 0 1 2 -possible_chars list in PlayerSelection.c
- *
  * Result:
  * 0 = draw
  * 1 = win

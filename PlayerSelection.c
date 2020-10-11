@@ -43,14 +43,14 @@ int index_of_char(char character)
    char_index with the appropriate value */
 void selection_changed(int* char_index)
 {
-    if (navswitch_push_event_p (NAVSWITCH_NORTH)) {
+    if (navswitch_push_event_p(NAVSWITCH_NORTH)) {
         if (*char_index == 2) {
             *char_index = 0;
         } else {
             *char_index = *char_index + 1;
         }
     }
-    if (navswitch_push_event_p (NAVSWITCH_SOUTH)) {
+    if (navswitch_push_event_p(NAVSWITCH_SOUTH)) {
         if (*char_index == 0) {
             *char_index = 2;
         } else {
@@ -102,29 +102,23 @@ void pick_move(int* moves)
     int away_char = -1;
     int received_char = -1;
     bool char_received_success = 0;
-
     led_off;
-
     while (1) {
         pacer_wait ();
         tinygl_update ();
         navswitch_update ();
         button_update();
-
         if (button_push_event_p(BUTTON1) & char_received_success) {
         led_off;
         break;
         }
-
         character = possible_chars[char_index];
         selection_changed(&char_index);
         send_move(&character);
         receive_move(&received_char);
         check_received_char(&received_char, &away_char, &char_received_success);
-
         display_character(character);
     }
-
     tinygl_clear();
     tinygl_update();
     moves[0] = char_index;

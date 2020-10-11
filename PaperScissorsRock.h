@@ -14,9 +14,6 @@
 #define led_on led_set (LED1, 1)
 #define led_off led_set (LED1, 0)
 
-/* Initialises the tinygl text for the menu */
-void text_init(void);
-
 /* Sets up the system components */
 void game_init(void);
 

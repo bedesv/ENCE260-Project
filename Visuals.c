@@ -41,9 +41,7 @@ int navswitch_moved(void)
 {
     int moved = 0;
     for (int i = 0; i < NO_NAVSWITCH_OPTIONS; i++) {
-
-
-        if (navswitch_push_event_p (i)) {
+        if (navswitch_push_event_p(i)) {
             moved = 1;
         }
     }
@@ -56,7 +54,6 @@ void clear_display(void)
     for (int row = 0; row < 7; row++) {
         pio_config_set(rows[row], PIO_OUTPUT_HIGH);
     }
-
     for (int col = 0; col < 5; col++) {
         pio_config_set(cols[col], PIO_OUTPUT_HIGH);
     }
@@ -77,7 +74,6 @@ void display_message(char* message)
         moved = navswitch_moved();
     }
     clear_display();
-
 }
 
 /* Displays the given character on the screen */

@@ -30,7 +30,6 @@ void score_init(stats* score)
 /*Checks who won the round
  * Actions:
  * P R S = 0 1 2 -possible_chars list in PlayerSelection.c
- *
  * Result:
  * 0 = draw
  * 1 = win
@@ -42,7 +41,6 @@ int check_selections(int home, int away)
     //Tie
     if (home == away) {
         result = 0;
-
     } else if (home < away) {
         if ((away-home) == 1) {
             result = 1;
