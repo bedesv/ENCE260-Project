@@ -65,6 +65,7 @@ void clear_display(void)
 /* Displays a message across the screen */
 void display_message(char* message)
 {
+    tinygl_clear();
     tinygl_font_set(&font3x5_1);
     tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
     tinygl_text(message);

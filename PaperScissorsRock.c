@@ -60,7 +60,6 @@ int main(void)
     int away_move;
     while(1) {
         pacer_wait();                              // Main game loop
-        clear_display();
         display_message("PICK MOVE");
         pick_move(moves);
         home_move = moves[0];
