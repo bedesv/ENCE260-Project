@@ -58,7 +58,8 @@ int main(void)
     char* current_stats = malloc(MAX_SCORE_LENGTH);
     int home_move;
     int away_move;
-    while(1) {                                      // Main game loop
+    while(1) {
+        pacer_wait();                              // Main game loop
         clear_display();
         display_message("PICK MOVE");
         pick_move(moves);
