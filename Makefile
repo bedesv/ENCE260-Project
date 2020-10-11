@@ -11,7 +11,7 @@ FONTSDIR = ../../fonts
 CC = avr-gcc
 CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I$(UTILSDIR) -I$(FONTSDIR) -I$(DRIVERDIR) -I$(DRIVERDIR)/avr
 OBJCOPY = avr-objcopy
-SIZE = avr-size
+SIZE = avr-size -C --mcu=atmega32u2
 DEL = rm
 
 

@@ -20,30 +20,18 @@
 #include "button.h"
 #include "ir_uart.h"
 
-#include "../../fonts/font3x5_1.h"
-#include "../../fonts/font5x7_1.h"
-
 #include "ScoreControl.h"
 #include "PlayerSelection.h"
 #include "Visuals.h"
 
 
-#define PACER_RATE 500
-#define MESSAGE_RATE 15
-#define MAX_SCORE_LENGTH 50
+#define PACER_RATE 500 // Pacer Hz
+#define MESSAGE_RATE 15 // Tinygl scroll speed
+#define MAX_SCORE_LENGTH 30 // Max string length for displaying the score
 
 #define led_on led_set(LED1, 1)
 #define led_off led_set(LED1, 0)
 
-
-/* Initialises the tinygl text for the menu */
-void text_init(void)
-{
-    tinygl_init(PACER_RATE);
-    tinygl_font_set(&font3x5_1);
-    tinygl_text_speed_set(MESSAGE_RATE);
-    tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
-}
 
 /* Sets up the system components */
 void game_init(void)
@@ -57,22 +45,6 @@ void game_init(void)
     pacer_init(PACER_RATE);
 }
 
-/* Displays a message across the screen */
-void display_message(char* message)
-{
-    tinygl_font_set(&font3x5_1);
-    tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text(message);
-    int moved = 0;
-    while (moved != 1) {
-        pacer_wait();
-        tinygl_update();
-        navswitch_update();
-        moved = navswitch_moved();
-    }
-    clear_display();
-
-}
 
 /* Gets the game ready and loops the gameplay an infinte number of times */
 int main(void)

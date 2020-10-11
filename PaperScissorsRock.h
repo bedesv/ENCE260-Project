@@ -7,8 +7,9 @@
     initialisation funtions and the main game loop.
 */
 
-#define PACER_RATE 500
-#define MESSAGE_RATE 15
+#define PACER_RATE 500 // Pacer Hz
+#define MESSAGE_RATE 15 // Tinygl scroll speed
+#define MAX_SCORE_LENGTH 30 // Max string length for displaying the score
 
 #define led_on led_set (LED1, 1)
 #define led_off led_set (LED1, 0)
